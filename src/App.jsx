@@ -30,20 +30,6 @@ function App() {
 
   const navigate = useNavigate()
   const viewMessage = useSelector((state) => state.message.viewMessage)
-  const firebaseConfig = {
-    apiKey: import.meta.apiKey,
-    authDomain: import.meta.authDomain,
-    projectId: import.meta.projectId,
-    storageBucket: import.meta.estorageBucketnv,
-    messagingSenderId: import.meta.messagingSenderId,
-    appId: import.meta.appId
-  };
-
-
-  useEffect(() => {
-    //axios
-  })
-
 
   return (
     <div className="gradient-background container-app">

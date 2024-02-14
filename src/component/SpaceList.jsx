@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import SpaceItem from './SpaceItem'
 import FormEditSpace from './FormEditSpace'
@@ -9,43 +9,37 @@ import { store } from '../redux/store'
 import Grid from '@mui/material/Unstable_Grid2'
 import { Box } from '@mui/material'
 import {useNavigate} from 'react-router-dom'
+import axios from 'axios'
 
 export default function SpaceList(){
-
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
     
     const viewFormEditSpace = useSelector(state => state.space.viewFormEditSpace)
-    const spaces = useSelector((state) => state.space.spaces)
     const tables = useSelector((state) => state.table.tables)
     const spacesToDelete = useSelector((state) => state.space.spacesToDelete)
+    const [spacesAxios, setSpacesAxios] = useState([])
 
+    const firebaseConfig = {
+        VITE_API_KEY: import.meta.env.VITE_API_KEY,
+        VITE_AUTH_DOMAIN: import.meta.env.VITE_AUTH_DOMAIN,
+        VITE_PROJECT_ID: import.meta.env.VITE_PROJECT_ID,
+        VITE_STORAGE_BUCKET: import.meta.env.VITE_STORAGE_BUCKET,
+        VITE_MESSAGING_SENDER: import.meta.env.VITE_MESSAGING_SENDER,
+        VITE_APP_ID: import.meta.env.VITE_APP_ID
+    };
 
     useEffect(()=>{
-        let connected = sessionStorage.getItem('connected') === 'true'
-    
-        if(!connected){
-          return navigate('/login')
-        }
-
-        const request = indexedDB.open('task-managerDB', 2)
-
-        request.onsuccess = function(event){
-
-            let db = event.target.result
-
-            const transaction = db.transaction(['space'], 'readonly')
-            const spaceStore = transaction.objectStore("space")
-            const request2 = spaceStore.getAll()
-
-            request2.onsuccess = function(){
-                console.log(request2.result)
-                dispatch(setSpaces(request2.result))
-            }
-
-        }
-
-    }, [])
+        axios({
+            method: 'get',
+            url: 'https://firestore.googleapis.com/v1/projects/' + firebaseConfig.VITE_PROJECT_ID + '/databases/(default)/documents/space?key=' + firebaseConfig.VITE_API_KEY,
+            responseType: 'json',
+        })
+        .then((response)=>{
+            setSpacesAxios(response.data.documents)
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+    })
 
     const getTablesToDeleteBySpacesToDelete = (spacesToDelete) => {
         let tablesToDelete = []
@@ -102,7 +96,7 @@ export default function SpaceList(){
              }}>Ajouter</button>
             <Box>
                 <Grid container spacing={2}>
-                    {spaces.map((space, i) => {
+                    {spacesAxios.map((space, i) => {
                         return <Grid xs={12} sm={6} md={4} lg={3} key={i}>
                                     <SpaceItem space={space} />
                                </Grid>

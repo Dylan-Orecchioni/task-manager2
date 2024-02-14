@@ -17,7 +17,7 @@ export default function SpaceItem({space}){
 
     return (
         <Box sx={{ minWidth: 275, width: '18rem' }} >
-            <Card variant='outlined' sx={{ backgroundColor: space.color }}>
+            <Card variant='outlined' sx={{ backgroundColor: space.fields.color.stringValue }}>
                 <React.Fragment>
                     <CardContent className="position-relative">
                         <button 
@@ -30,17 +30,17 @@ export default function SpaceItem({space}){
                             }}
                         >Editer</button>
                         <Checkbox 
-                            checked={spacesToDelete.includes(space.id.toString())}
+                            checked={spacesToDelete.includes(space.name.toString())}
                             onClick={()=>{
-                                if(spacesToDelete.includes(space.id.toString())){
-                                    store.dispatch(removeSpaceToDelete(space.id.toString()))
+                                if(spacesToDelete.includes(space.name.toString())){
+                                    store.dispatch(removeSpaceToDelete(space.name.toString()))
                                 }else{
-                                    store.dispatch(addSpaceToDelete(space.id.toString()))
+                                    store.dispatch(addSpaceToDelete(space.name.toString()))
                                 }
                             
                             }}
                         />
-                        <Typography variant='h7' component='div' className="text-center mt-3">{space.title}</Typography>
+                        <Typography variant='h7' component='div' className="text-center mt-3">{space.fields.title.stringValue}</Typography>
                         
                     </CardContent>
                     <CardActions>
