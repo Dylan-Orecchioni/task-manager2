@@ -4,7 +4,7 @@ import Tables from './component/Tables'
 import {Routes, Route, Link, useNavigate} from 'react-router-dom'
 import HomePage from './component/HomePage'
 import Login from './component/Login'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Message from './component/Message'
 import { useSelector } from 'react-redux'
 import SpaceList from './component/SpaceList'
@@ -22,6 +22,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import { Axios } from 'axios'
 
 const drawerWidth = 240;
 
@@ -29,6 +30,20 @@ function App() {
 
   const navigate = useNavigate()
   const viewMessage = useSelector((state) => state.message.viewMessage)
+  const firebaseConfig = {
+    apiKey: import.meta.apiKey,
+    authDomain: import.meta.authDomain,
+    projectId: import.meta.projectId,
+    storageBucket: import.meta.estorageBucketnv,
+    messagingSenderId: import.meta.messagingSenderId,
+    appId: import.meta.appId
+  };
+
+
+  useEffect(() => {
+    //axios
+  })
+
 
   return (
     <div className="gradient-background container-app">
