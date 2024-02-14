@@ -46,22 +46,30 @@ request.onupgradeneeded = function(event) {
     }    
   }
 
-    let tasks = [
-      {
-        id: '1',
-        content: "Task content 1",
-        tableId: '2'
-      }
-    ]
+  let tasks = [
+    {
+      id: '1',
+      content: "Task content 1",
+      tableId: '2'
+    },
+    {
+      id: '2',
+      content: "Task content 2",
+      tableId: '1'
+    }
+  ]
 
-    for(let task of tasks){
-      taskStore.put({
-        id: task.id,
-        content: task.content,
-        tableId: task.tableId
-      })
-    }    
+  for(let task of tasks){
+    taskStore.put({
+      id: task.id,
+      content: task.content,
+      tableId: task.tableId
+    })
+  }    
 
+  // localStorage.setItem('spaces', JSON.stringify(spaces));
+  // localStorage.setItem('tables', JSON.stringify(tables));
+  // localStorage.setItem('tasks', JSON.stringify(tasks));
 
 }
 
