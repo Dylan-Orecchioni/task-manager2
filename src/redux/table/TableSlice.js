@@ -88,9 +88,9 @@ export const TableSlice = createSlice({
             let title = action.payload.title
             let spaceId = action.payload.spaceId
             const newTable = {
-                id: uuidv4(),
+                id: action.payload.id,
                 title: title,
-                spaceId: spaceId
+                spaceId: spaceId,
             }
     
             updateTableIDB(newTable)

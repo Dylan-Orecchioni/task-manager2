@@ -29,6 +29,36 @@ export function getTables(){
 
 }
 
+const url_add_tables = "https://firestore.googleapis.com/v1/projects/" + import.meta.env.VITE_PROJECT_ID + "/databases/(default)/documents/table?key=" + import.meta.env.VITE_API_KEY;
+
+export function addTablesAPI(title, spaceId, order) {
+  console.log(title, spaceId, order);
+  try {
+    return axios.post(
+      url_add_tables,
+      {
+        "fields": {
+          "title": {
+            "stringValue": title
+          },
+          "spaceId": {
+            "stringValue": spaceId
+          },
+          "order": {
+            "integerValue": order
+          }
+        }
+      }
+    )
+    .then(function(response) {
+      return response.data.name.split("/table/")[1];
+    });
+  } catch(e) {
+    console.error(e);
+  }
+}
+
+
 export function deleteTablesAPI(id){
 
   const url_delete_table = "https://firestore.googleapis.com/v1/projects/" + import.meta.env.VITE_PROJECT_ID + "/databases/(default)/documents/table/" + id + "?key=" + import.meta.env.VITE_API_KEY

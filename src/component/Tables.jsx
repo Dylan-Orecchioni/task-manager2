@@ -49,6 +49,8 @@ export default function Tables() {
     const filterTables = (id_space, tables) => {
         return [...tables].filter(table => table.spaceId.toString() === id_space.toString())
     }
+
+    
     let tablesFiltered = filterTables(id, tables)
   return (
     <div className="container">
