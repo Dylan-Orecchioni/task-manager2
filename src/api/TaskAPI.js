@@ -27,3 +27,22 @@ export function getTasks(){
     }
 
 }
+
+export function deleteTasksAPI(id){
+
+  const url_delete_task = "https://firestore.googleapis.com/v1/projects/" + import.meta.env.VITE_PROJECT_ID + "/databases/(default)/documents/task/" + id + "?key=" + import.meta.env.VITE_API_KEY
+
+  try{
+
+      return axios.delete(
+          url_delete_task
+      )
+      .then(function(response){
+          console.log(response)
+      })
+
+  } catch(e){
+      console.error(e)
+  }
+
+}

@@ -10,6 +10,8 @@ import Grid from '@mui/material/Unstable_Grid2'
 import { Box } from '@mui/material'
 import {useNavigate} from 'react-router-dom'
 import { deleteSpacesAPI, getSpaces } from '../api/SpaceAPI'
+import { deleteTablesAPI } from '../api/TableAPI'
+import { deleteTasksAPI } from '../api/TaskAPI'
 
 export default function SpaceList(){
 
@@ -19,6 +21,7 @@ export default function SpaceList(){
     const viewFormEditSpace = useSelector(state => state.space.viewFormEditSpace)
     const spaces = useSelector((state) => state.space.spaces)
     const tables = useSelector((state) => state.table.tables)
+    const tasks = useSelector((state) => state.task.tasks)
     const spacesToDelete = useSelector((state) => state.space.spacesToDelete)
     
     useEffect(()=>{
@@ -49,12 +52,36 @@ export default function SpaceList(){
 
     const handleDeleteSpaces = async () => {
         let tablesToDelete = getTablesToDeleteBySpacesToDelete(spacesToDelete)
+        let tasksToDelete = getTasksToDelete(tablesToDelete)
+        
         for(let id of spacesToDelete){
             await deleteSpacesAPI(id)
+        }
+
+        for(let id of tablesToDelete){
+            deleteTablesAPI(id)
+        }
+
+        for(let id of tasksToDelete){
+            deleteTasksAPI(id)
         }
         store.dispatch(deleteTasksByTablesId(tablesToDelete))
         store.dispatch(deleteTablesBySpacesId(spacesToDelete))
         store.dispatch(deleteSpaces())
+    }
+
+    const getTasksToDelete = (tablesToDelete) => {
+
+        let tasksIdToDelete = []
+
+        for(let t of tasks){
+            if(tablesToDelete.includes(t.tableId)){
+                tasksIdToDelete.push(t.id)
+            }
+        }
+
+        return tasksIdToDelete
+
     }
 
     return (
