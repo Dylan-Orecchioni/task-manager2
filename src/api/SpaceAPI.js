@@ -8,9 +8,9 @@ export function getSpaces(){
             let spaces = []
             for(let sp of spacesFirebase){
                 let space = {
-                    id: sp.fields.id.stringValue,
-                    title: sp.fields.title.stringValue,
-                    color: sp.fields.color.stringValue,
+                  id: sp.name.split('/space/')[1],
+                  title: sp.fields.title.stringValue,
+                  color: sp.fields.color.stringValue,
                 }
                 spaces.push(space)
             }
@@ -24,32 +24,42 @@ export function getSpaces(){
 
 const url_add_spaces = "https://firestore.googleapis.com/v1/projects/" + import.meta.env.VITE_PROJECT_ID + "/databases/(default)/documents/space?key=" + import.meta.env.VITE_API_KEY
 
-export function addSpacesAPI(id, title, color){
+export function addSpacesAPI(title, color){
 
     try{
 
         return axios.post(
             url_add_spaces,
             {
-                "fields": {
-                "id": {
-                    "stringValue": id
-                    },
-                  "title": {
-                    "stringValue": title
-                  },
-                  "color": {
-                    "stringValue": color
-                  }
+              "fields": {
+                "title": {
+                  "stringValue": title
+                },
+                "color": {
+                  "stringValue": color
                 }
+              }
               }
         )
         .then(function(response){
-            console.log(response)
+          return response.data.name.split("/space/")[1]
         })
 
     } catch(e){
         console.error(e)
     }
 
+}
+
+export function deleteSpacesAPI(id) {
+  const url_delete_spaces = `https://firestore.googleapis.com/v1/projects/${import.meta.env.VITE_PROJECT_ID}/databases/(default)/documents/space/${id}?key=${import.meta.env.VITE_API_KEY}`;
+
+  try {
+      return axios.delete(url_delete_spaces)
+          .then(function(response) {
+              console.log(response);
+          });
+  } catch (e) {
+      console.error(e);
+  }
 }

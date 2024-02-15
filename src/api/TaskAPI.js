@@ -13,7 +13,7 @@ export function getTasks(){
 
             for(let ts of tasksFirebase){
                 let task = {
-                    id: ts.fields.id.stringValue,
+                    id: ts.name.split('/task/')[1],
                     content: ts.fields.content.stringValue,
                     tableId: ts.fields.tableId.stringValue,
                 }

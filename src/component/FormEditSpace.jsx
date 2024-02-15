@@ -8,7 +8,6 @@ import {style} from './styleModal'
 import { addSpacesAPI } from '../api/SpaceAPI'
 import { v4 as uuidv4 } from 'uuid'
 export default function FormEditSpace(){
-
     const spaces = useSelector((state) => state.space.spaces)
     const spaceToEdit = useSelector((state) => state.space.spaceToEdit)
     const contextSpace = useSelector((state) => state.space.contextSpace)
@@ -17,7 +16,7 @@ export default function FormEditSpace(){
     const [color, setColor] = useState('#fff')
     return (
         <Modal
-            open={viewFormEditSpace}
+            open={Boolean(viewFormEditSpace)}
             onClose={()=>{ 
                 store.dispatch(setViewFormEditSpace(false))
                 store.dispatch(setSpaceToEdit(null))
@@ -27,16 +26,15 @@ export default function FormEditSpace(){
         >
             <Box sx={style}>
                 <h3>{contextSpace === "add" ? 'Ajouter un espace' : "Modifier un espace"}</h3>
-                <form onSubmit={(e)=>{
+                <form onSubmit={async (e)=>{
                     e.preventDefault()
                     if(contextSpace === 'edit'){
                         if(spaceToEdit !== null){
                             store.dispatch(updateSpace({title, spaceId: spaceToEdit.id, color: color}))
                         }
                     }else{
-                        let id = uuidv4()
+                        let id = await addSpacesAPI(title, color)
                         store.dispatch(addSpace({id, title, color: color}))
-                        addSpacesAPI(id, title, color)
                     }
 
                 }}>
