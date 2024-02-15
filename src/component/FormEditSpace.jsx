@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux'
 import { Box } from '@mui/material' 
 import Modal from '@mui/material/Modal';
 import {style} from './styleModal'
-import { addSpacesAPI } from '../api/SpaceAPI'
-import { v4 as uuidv4 } from 'uuid'
+import { addSpacesAPI, updateSpacesAPI } from '../api/SpaceAPI'
+
 export default function FormEditSpace(){
     const spaces = useSelector((state) => state.space.spaces)
     const spaceToEdit = useSelector((state) => state.space.spaceToEdit)
@@ -14,6 +14,16 @@ export default function FormEditSpace(){
     const viewFormEditSpace = useSelector((state) => state.space.contextSpace)
     const [title, setTitle] = useState(spaceToEdit !== null ? spaceToEdit.title : '')
     const [color, setColor] = useState('#fff')
+
+    const handleUpdateSpace = async () => {
+        try {
+          await updateSpacesAPI(spaceToEdit.id, title, color);
+          store.dispatch(updateSpace({ title, spaceId: spaceToEdit.id, color }));
+        } catch (error) {
+          console.error("Error updating space: ", error);
+        }
+      }
+
     return (
         <Modal
             open={Boolean(viewFormEditSpace)}
@@ -30,7 +40,7 @@ export default function FormEditSpace(){
                     e.preventDefault()
                     if(contextSpace === 'edit'){
                         if(spaceToEdit !== null){
-                            store.dispatch(updateSpace({title, spaceId: spaceToEdit.id, color: color}))
+                            handleUpdateSpace();
                         }
                     }else{
                         let id = await addSpacesAPI(title, color)
