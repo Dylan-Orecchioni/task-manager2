@@ -10,13 +10,13 @@ export function getTables(){
         .then(function(response){
             let tablesFirebase = response.data.documents
             let tables = []
-
+            console.log(tablesFirebase)
             for(let tb of tablesFirebase){
                 let table = {
                     id: tb.fields.id.stringValue,
-                    title: tb.fields.title.stringValue,
                     order: tb.fields.order.stringValue,
                     spaceId: tb.fields.spaceId.stringValue,
+                    title: tb.fields.title.stringValue,
                 }
                 tables.push(table)
             }
